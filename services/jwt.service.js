@@ -11,5 +11,13 @@ export const generateAccessToken = (userId) => {
 };
 
 export const verifyJWTToken = (token) => {
-  return jwt.verify(token, process.env.JWT_SECRET);
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(decodedToken);
+      }
+    });
+  });
 };
