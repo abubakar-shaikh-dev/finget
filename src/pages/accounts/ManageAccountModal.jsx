@@ -124,9 +124,17 @@ export default function ManageAccountModal({
               required: true,
               message: "Please input the balance!",
             },
+            {
+              validator: (_, value) =>
+                value > 0
+                  ? Promise.resolve()
+                  : Promise.reject(
+                      new Error("Amount should not be negative or Zero")
+                    ),
+            },
           ]}
         >
-          <Input type="number" />
+          <Input min={0} type="number" />
         </Form.Item>
       </Form>
     </Modal>
