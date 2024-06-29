@@ -1,8 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+
+//Wrappers
 import { RedirectIfAuthenticated } from "./RedirectIfAuthenticated";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { Toaster } from "react-hot-toast";
+import PanelWrapper from "../components/PanelWrapper";
 
 // Pages
 import Home from "../pages";
@@ -35,11 +38,52 @@ const routes = [
     ),
     isProtected: false,
   },
-  { path: "/dashboard", element: <Dashboard />, isProtected: true },
-  { path: "/profile", element: <Profile />, isProtected: true },
-  { path: "/transactions", element: <Transactions />, isProtected: true },
-  { path: "/accounts", element: <Accounts />, isProtected: true },
-  { path: "/categories", element: <Categories />, isProtected: true },
+  {
+    path: "/dashboard",
+    element: (
+      <PanelWrapper>
+        <Dashboard />
+      </PanelWrapper>
+    ),
+    isProtected: true,
+  },
+  {
+    path: "/profile",
+    element: (
+      <PanelWrapper>
+        <Profile />
+      </PanelWrapper>
+    ),
+    isProtected: true,
+  },
+  {
+    path: "/transactions",
+    element: (
+      <PanelWrapper>
+        <Transactions />
+      </PanelWrapper>
+    ),
+    isProtected: true,
+  },
+  {
+    path: "/accounts",
+    element: (
+      <PanelWrapper>
+        {" "}
+        <Accounts />
+      </PanelWrapper>
+    ),
+    isProtected: true,
+  },
+  {
+    path: "/categories",
+    element: (
+      <PanelWrapper>
+        <Categories />
+      </PanelWrapper>
+    ),
+    isProtected: true,
+  },
 ];
 
 const AppRouter = () => (

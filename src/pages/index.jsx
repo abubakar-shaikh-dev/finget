@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
+import { SiWebmoney } from "react-icons/si";
 
 const navigation = [
   { name: "Product", href: "#" },
@@ -42,11 +43,9 @@ export default function Example() {
       </div>
       <div className="px-6 pt-6 lg:px-8">
         <nav className="flex items-center justify-between" aria-label="Global">
-          <div className="flex lg:flex-1">
-            <a href="#" className="-m-1.5 p-1.5">
-              <span className="sr-only">FINGET</span>
-              <h1 className="font-bold tracking-wide">FINGET</h1>
-            </a>
+          <div className="flex justify-center items-center gap-2">
+            <SiWebmoney style={{ color: "#000" }} />
+            <h1 className="text-black font-bold">FINGET</h1>
           </div>
           <div className="flex lg:hidden">
             <button
