@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import axiosInstance from "../../api/axiosInstance";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Signup() {
   const {
@@ -129,6 +129,17 @@ export default function Signup() {
                     >
                       {loading ? "Loading..." : "Sign up"}
                     </button>
+                  </div>
+                  <div className="text-sm text-center">
+                    <p className="text-gray-600">
+                      Already have an account?{" "}
+                      <Link
+                        to="/login"
+                        className="font-medium text-indigo-600 hover:text-indigo-500"
+                      >
+                        Login
+                      </Link>
+                    </p>
                   </div>
                 </form>
               </div>
