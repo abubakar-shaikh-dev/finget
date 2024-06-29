@@ -12,6 +12,7 @@
   "dependencies": {
     "@headlessui/react": "^2.1.1",
     "@heroicons/react": "^2.1.4",
+    "@mantine/hooks": "^7.11.0",
     "antd": "^5.18.3",
     "axios": "^1.7.2",
     "dayjs": "^1.11.11",
