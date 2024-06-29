@@ -80,6 +80,7 @@ export default function PanelWrapper({ children }) {
         onCancel={() => setLogoutModal(!logoutModal)}
         onOk={async () => {
           localStorage.removeItem("token");
+          localStorage.removeItem("user");
           navigate("/login");
         }}
         okText="Logout"
@@ -253,7 +254,7 @@ export default function PanelWrapper({ children }) {
           <header className="py-10">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-6">
               <h1 className="mb-3 text-4xl font-medium tracking-tight text-white">
-                Welcome Back, John Doe 👋
+                Welcome Back, {JSON.parse(localStorage.getItem("user")).name} 👋
               </h1>
               <span className="text-lg font-normal text-gray-400">
                 This is your Financial Overview Report
