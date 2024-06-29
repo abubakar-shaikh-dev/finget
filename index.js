@@ -7,6 +7,7 @@ import connectDB from "./config/db.js";
 //Routes
 import userRoutes from "./routes/user.routes.js";
 import accountRoutes from "./routes/account.routes.js";
+import categoryRoutes from "./routes/category.routes.js";
 
 //load env variables
 dotenv.config();
@@ -30,6 +31,7 @@ app.get("/", (req, res) => {
 //Routes
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/account", accountRoutes);
+app.use("/api/v1/category", categoryRoutes);
 
 // App listening
 const PORT = process.env.PORT || 5000;
