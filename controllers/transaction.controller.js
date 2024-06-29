@@ -1,4 +1,6 @@
 import Transaction from "../models/Transaction.model.js";
+import Account from "../models/Account.model.js";
+import Category from "../models/Category.model.js";
 
 export const create = async (req, res) => {
   try {
@@ -16,6 +18,19 @@ export const create = async (req, res) => {
 
     await transaction.save();
 
+    const categoryData = await Category.findOne({ _id: category });
+    const categoryType = categoryData.type;
+
+    if (categoryType === "INCOME") {
+      const accountData = await Account.findOne({ _id: account });
+      accountData.balance = accountData.balance + amount;
+      await accountData.save();
+    } else {
+      const accountData = await Account.findOne({ _id: account });
+      accountData.balance = accountData.balance - amount;
+      await accountData.save();
+    }
+
     return res.status(201).json({
       status: true,
       message: "Transaction created successfully",
@@ -32,7 +47,7 @@ export const get = async (req, res) => {
     const transactions = await Transaction.find({
       user: req.userId,
       isDeleted: false,
-    });
+    }).populate("account category");
 
     return res.status(200).json({
       status: true,
@@ -86,6 +101,10 @@ export const update = async (req, res) => {
       });
     }
 
+    const oldAccount = transaction.account;
+    const oldAmount = transaction.amount;
+    const oldCategory = transaction.category;
+
     transaction.date = date;
     transaction.account = account;
     transaction.category = category;
@@ -94,6 +113,34 @@ export const update = async (req, res) => {
     transaction.notes = notes;
 
     await transaction.save();
+
+    // revert old account balance
+    const oldAccountData = await Account.findOne({ _id: oldAccount });
+    const oldCategoryData = await Category.findOne({ _id: oldCategory });
+
+    if (oldCategoryData.type === "INCOME") {
+      oldAccountData.balance =
+        Number(oldAccountData.balance) - Number(oldAmount);
+    } else {
+      oldAccountData.balance =
+        Number(oldAccountData.balance) + Number(oldAmount);
+    }
+
+    await oldAccountData.save();
+
+    // update new account balance
+    const categoryData = await Category.findOne({ _id: category });
+    const categoryType = categoryData.type;
+
+    if (categoryType === "INCOME") {
+      const accountData = await Account.findOne({ _id: account });
+      accountData.balance = Number(accountData.balance) + Number(amount);
+      await accountData.save();
+    } else {
+      const accountData = await Account.findOne({ _id: account });
+      accountData.balance = Number(accountData.balance) - Number(amount);
+      await accountData.save();
+    }
 
     return res.status(200).json({
       status: true,
@@ -123,6 +170,19 @@ export const remove = async (req, res) => {
     transaction.isDeleted = true;
 
     await transaction.save();
+
+    const categoryData = await Category.findOne({ _id: transaction.category });
+    const categoryType = categoryData.type;
+
+    if (categoryType === "INCOME") {
+      const accountData = await Account.findOne({ _id: transaction.account });
+      accountData.balance = accountData.balance - transaction.amount;
+      await accountData.save();
+    } else {
+      const accountData = await Account.findOne({ _id: transaction.account });
+      accountData.balance = accountData.balance + transaction.amount;
+      await accountData.save();
+    }
 
     return res.status(200).json({
       status: true,

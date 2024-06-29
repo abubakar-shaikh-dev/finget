@@ -34,7 +34,13 @@ export const register = async (req, res) => {
     return res.status(201).json({
       status: true,
       message: "User created successfully",
-      data: { token },
+      data: {
+        token,
+        user: {
+          name: newUser.name,
+          email: newUser.email,
+        },
+      },
     });
   } catch (error) {
     console.log(error);
@@ -67,7 +73,13 @@ export const login = async (req, res) => {
     return res.status(200).json({
       status: true,
       message: "User logged in successfully",
-      data: { token },
+      data: {
+        token,
+        user: {
+          name: user.name,
+          email: user.email,
+        },
+      },
     });
   } catch (error) {
     console.log(error);
