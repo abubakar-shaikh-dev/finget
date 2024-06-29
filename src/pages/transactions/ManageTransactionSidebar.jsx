@@ -94,7 +94,7 @@ export default function ManageTransactionSidebar({
       handleCancel();
     } catch (error) {
       console.error(error);
-      toast.error("Failed to submit form", { duration: 4000 });
+      toast.error(error.response.data.message, { duration: 4000 });
     } finally {
       setLoading(false);
     }
@@ -211,9 +211,17 @@ export default function ManageTransactionSidebar({
               required: true,
               message: "Please input the amount!",
             },
+            {
+              validator: (_, value) =>
+                value > 0
+                  ? Promise.resolve()
+                  : Promise.reject(
+                      new Error("Amount should not be negative or Zero")
+                    ),
+            },
           ]}
         >
-          <Input type="number" />
+          <Input min={1} type="number" />
         </Form.Item>
         <Form.Item name="notes" label="Notes">
           <Input.TextArea />
