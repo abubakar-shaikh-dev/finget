@@ -1,7 +1,7 @@
 import { Fragment, useState, useRef } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { SiWebmoney } from "react-icons/si";
 import { Modal } from "antd";
 
@@ -9,6 +9,7 @@ export default function PanelWrapper({ children }) {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [logoutModal, setLogoutModal] = useState(false);
+  const navigate = useNavigate();
 
   const toogleRef = useRef(null);
 
@@ -63,7 +64,7 @@ export default function PanelWrapper({ children }) {
         onCancel={() => setLogoutModal(!logoutModal)}
         onOk={async () => {
           localStorage.removeItem("token");
-          window.location.href = "/login";
+          navigate("/login");
         }}
         okText="Logout"
         okButtonProps={{ style: { background: "#1f2937" } }}
@@ -235,9 +236,27 @@ export default function PanelWrapper({ children }) {
           </Disclosure>
           <header className="py-10">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              <h1 className="text-3xl font-bold tracking-tight text-white">
-                Dashboard
-              </h1>
+              {location.pathname === "/dashboard" && (
+                <>
+                  <h1 className="text-4xl font-bold tracking-tight text-white">
+                    Hello, John Doe 👋
+                  </h1>
+                  <br />
+                </>
+              )}
+              <h3 className="text-2xl font-bold tracking-tight text-white">
+                {location.pathname === "/dashboard"
+                  ? "Dashboard"
+                  : location.pathname === "/transactions"
+                  ? "Transactions"
+                  : location.pathname === "/accounts"
+                  ? "Accounts"
+                  : location.pathname === "/categories"
+                  ? "Categories"
+                  : location.pathname === "/settings"
+                  ? "Settings"
+                  : ""}
+              </h3>
             </div>
           </header>
         </div>
