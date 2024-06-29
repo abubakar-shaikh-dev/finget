@@ -16,6 +16,7 @@ import Profile from "../pages/profile";
 import Transactions from "../pages/transactions";
 import Accounts from "../pages/accounts";
 import Categories from "../pages/categories";
+import Settings from "../pages/settings";
 import PageNotFound from "../pages/PageNotFound";
 
 const routes = [
@@ -83,6 +84,14 @@ const routes = [
       </PanelWrapper>
     ),
     isProtected: true,
+  },
+  {
+    path: "/settings",
+    element: (
+      <PanelWrapper>
+        <Settings />
+      </PanelWrapper>
+    ),
   },
 ];
 
