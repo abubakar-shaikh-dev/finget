@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { RedirectIfAuthenticated } from "./RedirectIfAuthenticated";
 import { ProtectedRoute } from "./ProtectedRoute";
+import { Toaster } from "react-hot-toast";
 
 // Pages
 import Home from "../pages";
@@ -42,20 +43,23 @@ const routes = [
 ];
 
 const AppRouter = () => (
-  <Router>
-    <Routes>
-      {routes.map(({ path, element, isProtected }) => (
-        <Route
-          key={path}
-          path={path}
-          element={
-            isProtected ? <ProtectedRoute>{element}</ProtectedRoute> : element
-          }
-        />
-      ))}
-      <Route path="*" element={<PageNotFound />} />
-    </Routes>
-  </Router>
+  <>
+    <Toaster />
+    <Router>
+      <Routes>
+        {routes.map(({ path, element, isProtected }) => (
+          <Route
+            key={path}
+            path={path}
+            element={
+              isProtected ? <ProtectedRoute>{element}</ProtectedRoute> : element
+            }
+          />
+        ))}
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
+    </Router>
+  </>
 );
 
 export default AppRouter;
