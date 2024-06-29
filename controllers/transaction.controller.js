@@ -6,6 +6,24 @@ export const create = async (req, res) => {
   try {
     const { date, account, category, payee, amount, notes } = req.body;
 
+    const categoryData = await Category.findOne({ _id: category });
+    const categoryType = categoryData.type;
+
+    //Check whether the account has enough balance
+    if (categoryType === "EXPENSE") {
+      const accountData = await Account.findOne({ _id: account });
+      if (accountData.balance < amount) {
+        return res.status(400).json({
+          status: false,
+          message: "Account does not have enough balance",
+        });
+      }
+    } else {
+      const accountData = await Account.findOne({ _id: account });
+      accountData.balance = accountData.balance + amount;
+      await accountData.save();
+    }
+
     const transaction = new Transaction({
       date,
       account,
@@ -17,9 +35,6 @@ export const create = async (req, res) => {
     });
 
     await transaction.save();
-
-    const categoryData = await Category.findOne({ _id: category });
-    const categoryType = categoryData.type;
 
     if (categoryType === "INCOME") {
       const accountData = await Account.findOne({ _id: account });
@@ -89,6 +104,20 @@ export const update = async (req, res) => {
   try {
     const { date, account, category, payee, amount, notes } = req.body;
 
+    //Check whether the account has enough balance
+    const categoryData = await Category.findOne({ _id: category });
+    const categoryType = categoryData.type;
+
+    if (categoryType === "EXPENSE") {
+      const accountData = await Account.findOne({ _id: account });
+      if (accountData.balance < amount) {
+        return res.status(400).json({
+          status: false,
+          message: "Account does not have enough balance",
+        });
+      }
+    }
+
     const transaction = await Transaction.findOne({
       _id: req.params.id,
       user: req.userId,
@@ -129,8 +158,6 @@ export const update = async (req, res) => {
     await oldAccountData.save();
 
     // update new account balance
-    const categoryData = await Category.findOne({ _id: category });
-    const categoryType = categoryData.type;
 
     if (categoryType === "INCOME") {
       const accountData = await Account.findOne({ _id: account });
