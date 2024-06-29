@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-  useNavigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { RedirectIfAuthenticated } from "./RedirectIfAuthenticated";
 import { ProtectedRoute } from "./ProtectedRoute";
 
@@ -18,6 +12,7 @@ import Profile from "../pages/profile";
 import Transactions from "../pages/transactions";
 import Accounts from "../pages/accounts";
 import Categories from "../pages/categories";
+import PageNotFound from "../pages/PageNotFound";
 
 const routes = [
   { path: "/", element: <Home /> },
@@ -58,6 +53,7 @@ const AppRouter = () => (
           }
         />
       ))}
+      <Route path="*" element={<PageNotFound />} />
     </Routes>
   </Router>
 );
