@@ -3,7 +3,23 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { SiWebmoney } from "react-icons/si";
-import { Modal } from "antd";
+import { Button, Dropdown, Modal, Space, Typography, DatePicker } from "antd";
+const { RangePicker } = DatePicker;
+import { FaChevronDown } from "react-icons/fa";
+import styled from "styled-components";
+
+const StyledRangePicker = styled(RangePicker)`
+  .anticon-swap-right,
+  .anticon-calendar {
+    color: #fff !important;
+  }
+  ::placeholder {
+    color: #c5c5c5 !important;
+  }
+  .ant-picker-active-bar {
+    background: #fff !important;
+  }
+`;
 
 export default function PanelWrapper({ children }) {
   const location = useLocation();
@@ -235,28 +251,47 @@ export default function PanelWrapper({ children }) {
             )}
           </Disclosure>
           <header className="py-10">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              {location.pathname === "/dashboard" && (
-                <>
-                  <h1 className="text-4xl font-bold tracking-tight text-white">
-                    Hello, John Doe 👋
-                  </h1>
-                  <br />
-                </>
-              )}
-              <h3 className="text-2xl font-bold tracking-tight text-white">
-                {location.pathname === "/dashboard"
-                  ? "Dashboard"
-                  : location.pathname === "/transactions"
-                  ? "Transactions"
-                  : location.pathname === "/accounts"
-                  ? "Accounts"
-                  : location.pathname === "/categories"
-                  ? "Categories"
-                  : location.pathname === "/settings"
-                  ? "Settings"
-                  : ""}
-              </h3>
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-6">
+              <h1 className="mb-3 text-4xl font-medium tracking-tight text-white">
+                Welcome Back, John Doe 👋
+              </h1>
+              <span className="text-lg font-normal text-gray-400">
+                This is your Financial Overview Report
+              </span>
+            </div>
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-row justify-start gap-2">
+              <Dropdown
+                menu={{
+                  items: [
+                    { key: "1", label: "All Accounts" },
+                    { key: "2", label: "Account 1" },
+                    { key: "3", label: "Account 2" },
+                  ],
+                  selectable: true,
+                  defaultSelectedKeys: ["1"],
+                }}
+              >
+                <Typography.Link>
+                  <Space>
+                    <Button
+                      style={{
+                        background: "#3d434b",
+                        color: "#fff",
+                        borderColor: "#3d434b",
+                      }}
+                    >
+                      Account 2 <FaChevronDown />
+                    </Button>
+                  </Space>
+                </Typography.Link>
+              </Dropdown>
+              <StyledRangePicker
+                style={{
+                  background: "#3d434b",
+                  color: "#fff",
+                  borderColor: "#3d434b",
+                }}
+              />
             </div>
           </header>
         </div>
@@ -264,7 +299,7 @@ export default function PanelWrapper({ children }) {
         <main className="-mt-32">
           <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
             {/* Replace with your content */}
-            <div className="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+            <div className="rounded-lg bg-gray-100 px-5 py-6 shadow sm:px-6">
               {children}
             </div>
             {/* /End replace */}
