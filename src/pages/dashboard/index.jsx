@@ -17,7 +17,7 @@ const stats = [
     value: "71,897",
     icon: <PiChartLineUpBold />,
     iconBg: "#e2fee1",
-    iconColor: "#16f956",
+    iconColor: "#00d73d",
   },
   {
     title: "Expense",

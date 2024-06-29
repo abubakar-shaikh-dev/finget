@@ -18,7 +18,7 @@ export default function StatisticsCard({
           <span className="font-normal text-sm text-gray-400">
             Apr 4 2024 - May 4 2024
           </span>
-          <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
+          <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">
             {value}
           </dd>
         </div>
@@ -28,7 +28,7 @@ export default function StatisticsCard({
               background: iconBg,
               color: iconColor,
               borderRadius: "0.4em",
-              fontSize: "2.1em",
+              fontSize: "1.8em",
               padding: "0.3em",
             }}
           >
