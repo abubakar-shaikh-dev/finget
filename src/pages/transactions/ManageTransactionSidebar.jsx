@@ -54,7 +54,7 @@ export default function ManageTransactionSidebar({
       setAccounts(response.data.data);
     };
     fetchAccounts();
-  }, []);
+  }, [open]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -67,13 +67,22 @@ export default function ManageTransactionSidebar({
       setCategories(response.data.data);
     };
     fetchCategories();
-  }, []);
+  }, [open]);
 
   const handleSubmit = async () => {
     try {
-      const values = await form.validateFields();
+      let values = await form.validateFields();
       setLoading(true);
       const token = localStorage.getItem("token");
+
+      // Modify values.date to get the start of the day
+      if (values.date) {
+        values.date = dayjs(values.date).startOf("day").toDate();
+      }
+      if (values.amount) {
+        values.amount = Number(values.amount);
+      }
+
       if (id) {
         await axiosInstance.put(`/transaction/${id}`, values, {
           headers: {

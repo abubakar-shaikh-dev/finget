@@ -1,4 +1,4 @@
-import { Fragment, useState, useRef } from "react";
+import { Fragment, useState, useRef, useEffect } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -7,10 +7,14 @@ import { Button, Dropdown, Modal, Space, Typography, DatePicker } from "antd";
 const { RangePicker } = DatePicker;
 import { FaChevronDown } from "react-icons/fa";
 import styled from "styled-components";
+import dayjs from "dayjs";
+import { useLocalStorage } from "@mantine/hooks"; // Ensure correct import
+import axiosInstance from "../api/axiosInstance";
 
 const StyledRangePicker = styled(RangePicker)`
   .anticon-swap-right,
-  .anticon-calendar {
+  .anticon-calendar,
+  .anticon-close-circle {
     color: #fff !important;
   }
   ::placeholder {
@@ -19,13 +23,30 @@ const StyledRangePicker = styled(RangePicker)`
   .ant-picker-active-bar {
     background: #fff !important;
   }
+  .ant-picker-cell-in-view > div {
+    background: #ff0000 !important;
+  }
 `;
 
 export default function PanelWrapper({ children }) {
   const location = useLocation();
+  const [initLoading, setInitLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [logoutModal, setLogoutModal] = useState(false);
   const navigate = useNavigate();
+  const [accountData, setAccountData] = useState([]);
+  const [selectedAccount, setSelectedAccount] = useLocalStorage({
+    key: "selectedAccount",
+    defaultValue: "1",
+  });
+  const [fromDate, setFromDate] = useLocalStorage({
+    key: "fromDate",
+    defaultValue: dayjs().startOf("month").format("YYYY-MM-DD"),
+  });
+  const [toDate, setToDate] = useLocalStorage({
+    key: "toDate",
+    defaultValue: dayjs().endOf("month").format("YYYY-MM-DD"),
+  });
 
   const toogleRef = useRef(null);
 
@@ -72,6 +93,28 @@ export default function PanelWrapper({ children }) {
     return classes.filter(Boolean).join(" ");
   }
 
+  const fetchAccountData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const accountData = await axiosInstance.get("/account", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = accountData.data.data.map((item) => ({
+        key: item._id,
+        label: item.name,
+      }));
+      setAccountData([{ key: "1", label: "All Accounts" }, ...data]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAccountData();
+  }, []);
+
   return (
     <>
       <Modal
@@ -84,7 +127,6 @@ export default function PanelWrapper({ children }) {
           navigate("/login");
         }}
         okText="Logout"
-        okButtonProps={{ style: { background: "#1f2937" } }}
       >
         <h1>Are you sure you want to logout?</h1>
       </Modal>
@@ -263,13 +305,12 @@ export default function PanelWrapper({ children }) {
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-row justify-start gap-2">
               <Dropdown
                 menu={{
-                  items: [
-                    { key: "1", label: "All Accounts" },
-                    { key: "2", label: "Account 1" },
-                    { key: "3", label: "Account 2" },
-                  ],
+                  items: accountData,
                   selectable: true,
-                  defaultSelectedKeys: ["1"],
+                  defaultSelectedKeys: [selectedAccount],
+                  onSelect: (item) => {
+                    setSelectedAccount(item.key);
+                  },
                 }}
               >
                 <Typography.Link>
@@ -281,7 +322,11 @@ export default function PanelWrapper({ children }) {
                         borderColor: "#3d434b",
                       }}
                     >
-                      Account 2 <FaChevronDown />
+                      {
+                        accountData.find((item) => item.key === selectedAccount)
+                          ?.label
+                      }
+                      <FaChevronDown />
                     </Button>
                   </Space>
                 </Typography.Link>
@@ -291,6 +336,14 @@ export default function PanelWrapper({ children }) {
                   background: "#3d434b",
                   color: "#fff",
                   borderColor: "#3d434b",
+                }}
+                value={[dayjs(fromDate), dayjs(toDate)]}
+                format="YYYY-MM-DD"
+                onCalendarChange={(dates) => {
+                  if (dates) {
+                    setFromDate(dates[0].format("YYYY-MM-DD"));
+                    setToDate(dates[1].format("YYYY-MM-DD"));
+                  }
                 }}
               />
             </div>

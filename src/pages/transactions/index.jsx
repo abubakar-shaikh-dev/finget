@@ -4,6 +4,7 @@ import axiosInstance from "../../api/axiosInstance";
 import ManageTransactionModal from "./ManageTransactionSidebar";
 import toast from "react-hot-toast";
 import moment from "moment-timezone";
+import { useLocalStorage } from "@mantine/hooks";
 
 export default function Transactions() {
   const [initLoading, setInitLoading] = useState(true);
@@ -13,6 +14,17 @@ export default function Transactions() {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [id, setId] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
+
+  //LocalStorage States
+  const [selectedAccount] = useLocalStorage({
+    key: "selectedAccount",
+  });
+  const [fromDate] = useLocalStorage({
+    key: "fromDate",
+  });
+  const [toDate] = useLocalStorage({
+    key: "toDate",
+  });
 
   const columns = [
     {
@@ -110,6 +122,11 @@ export default function Transactions() {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        params: {
+          ...(selectedAccount !== "1" && { account: selectedAccount }),
+          fromDate: fromDate,
+          toDate: toDate,
+        },
       });
       setData(response.data.data);
       setInitLoading(false);
@@ -140,7 +157,7 @@ export default function Transactions() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [selectedAccount, fromDate, toDate]);
 
   return (
     <>
