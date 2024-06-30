@@ -52,8 +52,8 @@ export default function PanelWrapper({ children }) {
   const toogleRef = useRef(null);
 
   const user = {
-    name: "Tom Cook",
-    email: "tom@example.com",
+    name: JSON.parse(localStorage.getItem("user"))?.name,
+    email: JSON.parse(localStorage.getItem("user"))?.email,
     imageUrl: "profile.png",
   };
 
