@@ -339,8 +339,8 @@ export default function PanelWrapper({ children }) {
                 }}
                 value={[dayjs(fromDate), dayjs(toDate)]}
                 format="YYYY-MM-DD"
-                onCalendarChange={(dates) => {
-                  if (dates) {
+                onChange={(dates) => {
+                  if (dates && dates.length === 2) {
                     setFromDate(dates[0].format("YYYY-MM-DD"));
                     setToDate(dates[1].format("YYYY-MM-DD"));
                   }

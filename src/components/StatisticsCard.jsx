@@ -1,3 +1,6 @@
+import { useLocalStorage } from "@mantine/hooks";
+import dayjs from "dayjs";
+
 export default function StatisticsCard({
   title,
   value,
@@ -5,6 +8,14 @@ export default function StatisticsCard({
   iconBg,
   iconColor,
 }) {
+  const [fromDate] = useLocalStorage({
+    key: "fromDate",
+  });
+
+  const [toDate] = useLocalStorage({
+    key: "toDate",
+  });
+
   return (
     <div
       key={title}
@@ -16,7 +27,7 @@ export default function StatisticsCard({
             {title}
           </dt>
           <span className="font-normal text-sm text-gray-400">
-            Apr 4 2024 - May 4 2024
+            {dayjs(fromDate).format("DD MMM YYYY")} -{" "} {dayjs(toDate).format("DD MMM YYYY")}
           </span>
           <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">
             {value}
