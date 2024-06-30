@@ -127,7 +127,10 @@ export const update = async (req, res) => {
     return res.status(200).json({
       status: true,
       message: "User updated successfully",
-      data: user,
+      data: {
+        name:user.name,
+        email:user.email
+      }
     });
   } catch (error) {
     console.log(error);
