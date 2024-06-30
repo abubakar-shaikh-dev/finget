@@ -118,7 +118,7 @@ export default function Index() {
       </div>
       <div>
         <Row gutter={16}>
-          <Col lg={16}>
+          <Col lg={16} md={24} xs={24}>
             <Card className="w-full shadow">
               <div>
                 <h1 className="text-2xl font-semibold">Transactions</h1>
@@ -127,7 +127,12 @@ export default function Index() {
               </div>
             </Card>
           </Col>
-          <Col lg={8} className="flex justify-between flex-col">
+          <Col
+            lg={8}
+            md={24}
+            xs={24}
+            className="md:mt-2 flex justify-between flex-col"
+          >
             <Card className="h-[70%] w-full shadow">
               <div>
                 <h1 className="text-2xl font-semibold">Categories</h1>

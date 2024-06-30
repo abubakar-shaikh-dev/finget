@@ -3,6 +3,7 @@ import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { SiWebmoney } from "react-icons/si";
+import { useLocalStorage } from "@mantine/hooks";
 
 const navigation = [
   { name: "Product", href: "#" },
@@ -13,6 +14,8 @@ const navigation = [
 
 export default function Example() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const token = localStorage.getItem("token");
 
   return (
     <div className="isolate bg-white">
@@ -70,10 +73,11 @@ export default function Example() {
           </div> */}
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
             <Link
-              to="/login"
+              to={token ? "/dashboard" : "/login"}
               className="text-sm font-semibold leading-6 text-gray-900"
             >
-              Log in <span aria-hidden="true">&rarr;</span>
+              {token ? "Dashboard" : "Log in"}{" "}
+              <span aria-hidden="true">&rarr;</span>
             </Link>
           </div>
         </nav>
@@ -152,20 +156,20 @@ export default function Example() {
                 </Link>
               </div>
             </div>
-            {/* <div className="mt-16 flow-root sm:mt-24">
-              <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
+            <div className="mt-16 flow-root sm:mt-24">
+              <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-2">
                 <img
-                  src="https://tailwindui.com/img/component-images/project-app-screenshot.png"
+                  src="banner.png"
                   alt="App screenshot"
                   width={2432}
                   height={1442}
                   className="rounded-md shadow-2xl ring-1 ring-gray-900/10"
                 />
               </div>
-            </div> */}
+            </div>
           </div>
           <div className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
-            <svg
+            {/* <svg
               className="relative left-[calc(50%+3rem)] h-[21.1875rem] max-w-none -translate-x-1/2 sm:left-[calc(50%+36rem)] sm:h-[42.375rem]"
               viewBox="0 0 1155 678"
             >
@@ -187,7 +191,7 @@ export default function Example() {
                   <stop offset={1} stopColor="#FF80B5" />
                 </linearGradient>
               </defs>
-            </svg>
+            </svg> */}
           </div>
         </div>
       </main>

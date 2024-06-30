@@ -16,7 +16,7 @@ export default function DateTimeCard() {
   }, []);
 
   return (
-    <div className="bg-white rounded-lg p-5 shadow w-full">
+    <div className="h-[27%] bg-white rounded-lg p-5 shadow w-full">
       <div className="flex items-center gap-3 mb-2">
         <FaCalendarAlt />
         <h3 className="text-xl font-semibold  text-left">Date & Time</h3>

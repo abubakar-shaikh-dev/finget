@@ -33,7 +33,7 @@ const ApexChart = () => {
         },
       },
     },
-    colors: ["#4cff91", "#ff4e4e"],
+    colors: [ "#ff4e4e","#4cff91"],
     dataLabels: {
       enabled: false,
     },
@@ -71,9 +71,14 @@ const ApexChart = () => {
       });
 
       const { income, expense } = response.data.data;
+
+      // Transform the income and expense data into the correct format
+      const incomeData = income.map((item) => ({ x: item[0], y: item[1] }));
+      const expenseData = expense.map((item) => ({ x: item[0], y: item[1] }));
+
       setSeries([
-        { name: "Income", data: income },
-        { name: "Expense", data: expense },
+        { name: "Expense", data: expenseData },
+        { name: "Income", data: incomeData },
       ]);
     } catch (error) {
       console.error("Error fetching data:", error);
