@@ -1,4 +1,6 @@
 import Account from "../models/Account.model.js";
+import mongoose from "mongoose";
+const { ObjectId } = mongoose.Types;
 
 export const createAccount = async (req, res) => {
   try {
@@ -27,12 +29,13 @@ export const createAccount = async (req, res) => {
 export const getAllAccounts = async (req, res) => {
   try {
     const accounts = await Account.find({
-      user: req.userId,
+      user: new ObjectId(req.userId),
       isDeleted: false,
     });
 
     return res.status(200).json({
       status: true,
+      message: "Accounts fetched successfully",
       data: accounts,
     });
   } catch (error) {

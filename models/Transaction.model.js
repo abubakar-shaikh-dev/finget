@@ -7,12 +7,12 @@ const TransactionSchema = new mongoose.Schema(
       required: true,
     },
     account: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Account",
       required: true,
     },
     category: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
       required: true,
     },
@@ -28,7 +28,7 @@ const TransactionSchema = new mongoose.Schema(
       type: String,
     },
     user: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },

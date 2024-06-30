@@ -28,7 +28,7 @@ export const get = async (req, res) => {
     const categories = await Category.find({
       user: req.userId,
       isDeleted: false,
-    });
+    }).sort({ type: 1 });
 
     return res.status(200).json({
       status: true,
