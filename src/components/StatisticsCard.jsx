@@ -1,5 +1,7 @@
+import React from "react";
 import { useLocalStorage } from "@mantine/hooks";
 import dayjs from "dayjs";
+import CountUp from "react-countup";
 
 export default function StatisticsCard({
   title,
@@ -16,6 +18,12 @@ export default function StatisticsCard({
     key: "toDate",
   });
 
+  // Create a formatter for rupees
+  const rupeeFormatter = new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+  });
+
   return (
     <div
       key={title}
@@ -27,10 +35,16 @@ export default function StatisticsCard({
             {title}
           </dt>
           <span className="font-normal text-sm text-gray-400">
-            {dayjs(fromDate).format("DD MMM YYYY")} -{" "} {dayjs(toDate).format("DD MMM YYYY")}
+            {dayjs(fromDate).format("DD MMM YYYY")} -{" "}
+            {dayjs(toDate).format("DD MMM YYYY")}
           </span>
           <dd className="mt-1 text-2xl font-semibold tracking-tight text-gray-900">
-            {value}
+            <CountUp
+              start={0}
+              end={parseFloat(value)}
+              duration={2}
+              formattingFn={rupeeFormatter.format}
+            />
           </dd>
         </div>
         <div>

@@ -10,6 +10,7 @@ import styled from "styled-components";
 import dayjs from "dayjs";
 import { useLocalStorage } from "@mantine/hooks"; // Ensure correct import
 import axiosInstance from "../api/axiosInstance";
+import toast from "react-hot-toast";
 
 const StyledRangePicker = styled(RangePicker)`
   .anticon-swap-right,
@@ -346,6 +347,23 @@ export default function PanelWrapper({ children }) {
                   }
                 }}
               />
+              <Button
+                style={{
+                  background: "#3d434b",
+                  color: "#fff",
+                  borderColor: "#3d434b",
+                }}
+                onClick={() => {
+                  setFromDate(dayjs().startOf("month").format("YYYY-MM-DD"));
+                  setToDate(dayjs().endOf("month").format("YYYY-MM-DD"));
+                  setSelectedAccount("1");
+                  toast.success("Filters Reset Successfully", {
+                    position: "top-right",
+                  });
+                }}
+              >
+                Reset
+              </Button>
             </div>
           </header>
         </div>

@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Modal, Table, Tag } from "antd";
+import React, { useEffect, useState, useRef } from "react";
+import { Modal, Tag, Button, Input, Space, Table } from "antd";
 import axiosInstance from "../../api/axiosInstance";
 import ManageTransactionModal from "./ManageTransactionSidebar";
 import toast from "react-hot-toast";
 import moment from "moment-timezone";
 import { useLocalStorage } from "@mantine/hooks";
+import { SearchOutlined } from "@ant-design/icons";
+import Highlighter from "react-highlight-words";
 
 export default function Transactions() {
   const [initLoading, setInitLoading] = useState(true);
@@ -26,6 +28,121 @@ export default function Transactions() {
     key: "toDate",
   });
 
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef(null);
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText("");
+  };
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: "block",
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({
+                closeDropdown: false,
+              });
+              setSearchText(selectedKeys[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1677ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: "#ffc069",
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
+
   const columns = [
     {
       title: "S.No",
@@ -40,6 +157,7 @@ export default function Transactions() {
       key: "date",
       render: (text, record) =>
         moment(record.date).tz("Asia/Kolkata").format("DD-MM-YYYY"),
+      sorter: (a, b) => moment(a.date).unix() - moment(b.date).unix(),
     },
     {
       title: "Account",
@@ -52,11 +170,13 @@ export default function Transactions() {
       dataIndex: "category",
       key: "category",
       render: (text, record) => text.name,
+      sorter: (a, b) => a.category.name.localeCompare(b.category.name),
     },
     {
       title: "Payee",
       dataIndex: "payee",
       key: "payee",
+      ...getColumnSearchProps("payee"),
     },
     {
       title: "Amount",
@@ -85,6 +205,7 @@ export default function Transactions() {
           );
         }
       },
+      sorter: (a, b) => a.amount - b.amount,
     },
     {
       title: "Action",
