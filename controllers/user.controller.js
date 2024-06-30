@@ -86,3 +86,87 @@ export const login = async (req, res) => {
     return res.status(500).json({ status: false, message: error.message });
   }
 };
+
+export const get = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId, { password: 0 });
+
+    if (!user) {
+      return res.status(404).json({
+        status: false,
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      status: true,
+      message: "User fetched successfully",
+      data: user,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: false, message: error.message });
+  }
+};
+
+export const update = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+      return res.status(404).json({
+        status: false,
+        message: "User not found",
+      });
+    }
+
+    user.name = req.body.name;
+
+    await user.save();
+
+    return res.status(200).json({
+      status: true,
+      message: "User updated successfully",
+      data: user,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: false, message: error.message });
+  }
+};
+
+export const changePassword = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+      return res.status(404).json({
+        status: false,
+        message: "User not found",
+      });
+    }
+
+    const isPasswordMatch = await comparePassword(
+      req.body.oldPassword,
+      user.password
+    );
+
+    if (!isPasswordMatch) {
+      return res
+        .status(400)
+        .json({ status: false, message: "Invalid old password" });
+    }
+
+    user.password = await hashPassword(req.body.newPassword);
+
+    await user.save();
+
+    return res.status(200).json({
+      status: true,
+      message: "Password changed successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: false, message: error.message });
+  }
+};
