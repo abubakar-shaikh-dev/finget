@@ -19,10 +19,6 @@ export const create = async (req, res) => {
           message: "Account does not have enough balance",
         });
       }
-    } else {
-      const accountData = await Account.findOne({ _id: account });
-      accountData.balance = accountData.balance + amount;
-      await accountData.save();
     }
 
     const transaction = new Transaction({
