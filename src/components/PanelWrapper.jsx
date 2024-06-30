@@ -31,7 +31,6 @@ const StyledRangePicker = styled(RangePicker)`
 
 export default function PanelWrapper({ children }) {
   const location = useLocation();
-  const [initLoading, setInitLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [logoutModal, setLogoutModal] = useState(false);
   const navigate = useNavigate();
@@ -47,6 +46,9 @@ export default function PanelWrapper({ children }) {
   const [toDate, setToDate] = useLocalStorage({
     key: "toDate",
     defaultValue: dayjs().endOf("month").format("YYYY-MM-DD"),
+  });
+  const [userData, setUserData] = useLocalStorage({
+    key: "user",
   });
 
   const toogleRef = useRef(null);
@@ -114,7 +116,7 @@ export default function PanelWrapper({ children }) {
 
   useEffect(() => {
     fetchAccountData();
-  }, []);
+  }, [userData]);
 
   return (
     <>
@@ -297,7 +299,8 @@ export default function PanelWrapper({ children }) {
           <header className="py-10">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-6">
               <h1 className="mb-3 text-4xl font-medium tracking-tight text-white">
-                Welcome Back, {JSON.parse(localStorage.getItem("user")).name} 👋
+                Welcome Back, {JSON.parse(localStorage.getItem("user"))?.name}{" "}
+                👋
               </h1>
               <span className="text-lg font-normal text-gray-400">
                 This is your Financial Overview Report
