@@ -1,6 +1,7 @@
 import Transaction from "../models/Transaction.model.js";
 import Account from "../models/Account.model.js";
 import Category from "../models/Category.model.js";
+import moment from "moment-timezone";
 
 export const create = async (req, res) => {
   try {
@@ -59,10 +60,30 @@ export const create = async (req, res) => {
 
 export const get = async (req, res) => {
   try {
-    const transactions = await Transaction.find({
+    const { account, fromDate, toDate } = req.query;
+
+    const filters = {
       user: req.userId,
       isDeleted: false,
-    }).populate("account category");
+    };
+
+    if (account) {
+      filters.account = account;
+    }
+
+    if (fromDate || toDate) {
+      filters.date = {};
+      if (fromDate) {
+        filters.date.$gte = moment(fromDate).startOf("day").toDate();
+      }
+      if (toDate) {
+        filters.date.$lte = moment(toDate).endOf("day").toDate();
+      }
+    }
+
+    const transactions = await Transaction.find(filters).populate(
+      "account category"
+    );
 
     return res.status(200).json({
       status: true,
@@ -70,7 +91,7 @@ export const get = async (req, res) => {
       data: transactions,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).send({ message: error.message });
   }
 };
