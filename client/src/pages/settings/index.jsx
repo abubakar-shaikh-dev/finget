@@ -12,7 +12,6 @@ export default function index() {
     {
       key: "1",
       label: "User Settings",
-      children: "Content of Tab Pane 1",
       icon: <UserOutlined />,
       children: <UserDetails />,
     },
