@@ -1,0 +1,34 @@
+{
+  "name": "finance-management-application",
+  "version": "1.0.0",
+  "description": "prasunethon",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abubakar-shaikh-dev/finance-application-management-api.git"
+  },
+  "author": "Abubakar Shaikh Dev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abubakar-shaikh-dev/finance-application-management-api/issues"
+  },
+  "homepage": "https://github.com/abubakar-shaikh-dev/finance-application-management-api#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "moment-timezone": "^0.5.45",
+    "mongoose": "^8.4.4",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
