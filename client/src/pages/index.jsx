@@ -4,6 +4,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { SiWebmoney } from "react-icons/si";
 import { useLocalStorage } from "@mantine/hooks";
+import { Tag } from "antd";
 
 const navigation = [
   { name: "Product", href: "#" },
@@ -49,6 +50,12 @@ export default function Example() {
           <div className="flex justify-center items-center gap-2">
             <SiWebmoney style={{ color: "#000" }} />
             <h1 className="text-black font-bold">FINGET</h1>
+            <Tag
+              color="error"
+              className="shadow-md hover:shadow-lg cursor-pointer"
+            >
+              EXPERIMENTAL
+            </Tag>
           </div>
           <div className="flex lg:hidden">
             <button
