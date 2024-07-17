@@ -11,6 +11,7 @@ import dayjs from "dayjs";
 import { useLocalStorage } from "@mantine/hooks"; // Ensure correct import
 import axiosInstance from "../api/axiosInstance";
 import toast from "react-hot-toast";
+import { Tag } from "antd";
 
 const StyledRangePicker = styled(RangePicker)`
   .anticon-swap-right,
@@ -145,6 +146,9 @@ export default function PanelWrapper({ children }) {
                         <div className="flex justify-center items-center gap-2">
                           <SiWebmoney style={{ color: "#fff" }} />
                           <h1 className="text-white font-bold">FINGET</h1>
+                          <Tag className="shadow-md hover:shadow-lg cursor-pointer bg-gray-800 text-purple-500 border-purple-500">
+                            EXPERIMENTAL
+                          </Tag>
                         </div>
                         <div className="hidden md:block">
                           <div className="ml-10 flex items-baseline space-x-4">
